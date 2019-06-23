@@ -28,17 +28,39 @@ echo $PASSWD | sudo ls &> /dev/null 2>&1
 
 function apt_install()
 {
-	sudo apt install -y gcc wget make flex bison gperf gawk grep help2man
-	sudo apt install -y gettext automake flex texinfo libtool libtool-bin libncurses-dev 
-	sudo apt install -y python python-dev python-pip python-setuptools python-serial python-cryptography python-future
+	sudo apt install -y gcc wget make gperf bison flex texinfo help2man gawk automake libncurses5-dev
+	sudo apt install -y sed bash cut dpkg-dev patch texinfo m4 libtool stat cvs websvn tar gzip bzip2 lzma readlink patch gcj cvsd
 	sudo apt autoremove -y 
 }
 
-function chmod_config()
+function libtool_install()
 {
-	chmod +x ./crosstool-NG/bootstrap
-	chmod +x ./crosstool-NG/configure
-	chmod +x ./crosstool-NG/lib/crosstool-ng/scripts/*
+	cd $WorkPath
+	sudo apt install -y gcc wget make 
+	sudo apt remove -y libtool
+	wget -O libtool.tar.gz ftp://ftp.gnu.org/gnu/libtool/libtool-1.5.26.tar.gz
+	mkdir libtool
+	tar -xzvf libtool.tar.gz  -C libtool --strip-components 1 
+
+	./configure
+	make
+	sudo make install	
+}
+
+function set_crosstool_ng()
+{
+
+	if [ ! -d $WorkPath/crosstool-NG ]; then	
+		cd $WorkPath
+		#wget https://codeload.github.com/crosstool-ng/crosstool-ng/tar.gz/crosstool-ng-1.24.0
+		#git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng
+		git clone --depth=1 -b lx106 git://github.com/jcmvbkbc/crosstool-NG.git	
+		cd crosstool-NG
+		chmod +x ./bootstrap
+		chmod +x ./configure
+		./bootstrap && ./configure --prefix=`pwd`
+		make && make install
+	fi
 }
 
 OPTION=$(whiptail --title "Config System" \
@@ -52,21 +74,19 @@ OPTION=$(whiptail --title "Config System" \
 if [ $OPTION = '0' ]; then
 	clear
 	echo -e "AUTO all\n${Line}"
-	apt_install
-	chmod_config
-	set_esp8266
-	set_esp8266_sdk
-	set_esp8266_rtos
+	libtool_install
+	set_crosstool_ng
+
 	exit 0
 elif [ $OPTION = '1' ]; then
 	clear
 	echo -e "update source\n${Line}"
-	set_esp8266
+	
 	exit 0
 elif [ $OPTION = '2' ]; then
 	clear
 	echo -e "make\n${Line}"
-	set_esp32
+	
 	exit 0
 else
 	whiptail --title "Config System" \
