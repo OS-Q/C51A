@@ -63,6 +63,15 @@ function set_crosstool_ng()
 	make && make install
 }
 
+function get_source()
+{
+	if [ ! -d $WorkPath/crosstool-NG ]; then	
+		cd $WorkPath/crosstool-NG/.build/tarballs
+		wget ftp://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2
+		wget http://www.bastoul.net/cloog/pages/download/cloog-0.18.4.tar.gz
+	fi
+
+}
 
 function make_xtensa_lx106()
 {
