@@ -63,11 +63,19 @@ function set_crosstool_ng()
 	make && make install
 }
 
+
+function make_xtensa_lx106()
+{
+	cd $WorkPath/crosstool-NG
+	./ct-ng xtensa-lx106-elf
+	./ct-ng build
+}
+
 OPTION=$(whiptail --title "Config System" \
 	--menu "$MENUSTR" 20 60 12 --cancel-button Finish --ok-button Select \
 	"0"   "AUTO" \
-	"1"   "update" \
-	"2"   "make" \
+	"1"   "crosstool_ng" \
+	"2"   "make_xtensa_lx106" \
 	3>&1 1>&2 2>&3)
 	
 
@@ -76,17 +84,17 @@ if [ $OPTION = '0' ]; then
 	echo -e "AUTO\n${Line}"
 	libtool_install
 	set_crosstool_ng
-
+	make_xtensa_lx106
 	exit 0
 elif [ $OPTION = '1' ]; then
 	clear
-	echo -e "update source\n${Line}"
+	echo -e "crosstool_ng\n${Line}"
 	set_crosstool_ng
 	exit 0
 elif [ $OPTION = '2' ]; then
 	clear
-	echo -e "make\n${Line}"
-	
+	echo -e "make xtensa lx106\n${Line}"
+	make_xtensa_lx106
 	exit 0
 else
 	whiptail --title "Config System" \
