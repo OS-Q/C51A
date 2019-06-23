@@ -41,7 +41,7 @@ function libtool_install()
 	wget -O libtool.tar.gz ftp://ftp.gnu.org/gnu/libtool/libtool-1.5.26.tar.gz
 	mkdir libtool
 	tar -xzvf libtool.tar.gz  -C libtool --strip-components 1 
-
+	cd libtool
 	./configure
 	make
 	sudo make install	
@@ -55,12 +55,12 @@ function set_crosstool_ng()
 		#wget https://codeload.github.com/crosstool-ng/crosstool-ng/tar.gz/crosstool-ng-1.24.0
 		#git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng
 		git clone --depth=1 -b lx106 git://github.com/jcmvbkbc/crosstool-NG.git	
-		cd crosstool-NG
-		chmod +x ./bootstrap
-		chmod +x ./configure
-		./bootstrap && ./configure --prefix=`pwd`
-		make && make install
 	fi
+	cd crosstool-NG
+	chmod +x ./bootstrap
+	chmod +x ./configure
+	./bootstrap && ./configure --prefix=`pwd`
+	make && make install
 }
 
 OPTION=$(whiptail --title "Config System" \
@@ -73,7 +73,7 @@ OPTION=$(whiptail --title "Config System" \
 
 if [ $OPTION = '0' ]; then
 	clear
-	echo -e "AUTO all\n${Line}"
+	echo -e "AUTO\n${Line}"
 	libtool_install
 	set_crosstool_ng
 
@@ -81,7 +81,7 @@ if [ $OPTION = '0' ]; then
 elif [ $OPTION = '1' ]; then
 	clear
 	echo -e "update source\n${Line}"
-	
+	set_crosstool_ng
 	exit 0
 elif [ $OPTION = '2' ]; then
 	clear
