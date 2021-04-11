@@ -21,8 +21,8 @@ jobs:
     - name: build
       id: script
       run: |
-        chmod +x ./install.sh
-        sudo ./install.sh
+        chmod +x ./build.sh
+        sudo ./build.sh
         echo "GCC=$PWD/crosstool-NG/build" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
