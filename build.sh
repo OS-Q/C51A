@@ -7,7 +7,6 @@ function apt_install()
 {
 	sudo apt install -y gcc wget make gperf bison flex texinfo help2man gawk automake libncurses5-dev
 	sudo apt install -y sed bash cut dpkg-dev patch texinfo m4 libtool stat cvs websvn tar gzip bzip2 lzma readlink patch gcj cvsd
-	sudo apt autoremove -y
 }
 
 function libtool_install()
@@ -19,14 +18,11 @@ function libtool_install()
 	mkdir libtool
 	tar -xzvf libtool.tar.gz  -C libtool --strip-components 1
 	cd libtool
-	./configure
-	make
-	sudo make install
+	sudo ./configure && make && sudo make install
 }
 
 function set_crosstool_ng()
 {
-
 	if [ ! -d $WorkPath/crosstool-NG ]; then
 		cd $WorkPath
 		#wget https://codeload.github.com/crosstool-ng/crosstool-ng/tar.gz/crosstool-ng-1.24.0
@@ -40,27 +36,16 @@ function set_crosstool_ng()
 	make && make install
 }
 
-function get_source()
+function build_xtensa_lx106()
 {
-	if [ ! -d $WorkPath/crosstool-NG ]; then
-		cd $WorkPath/crosstool-NG/.build/tarballs
-		wget ftp://ftp.gnu.org/gnu/gcc/gcc-4.8.2/gcc-4.8.2.tar.bz2
-		wget http://www.bastoul.net/cloog/pages/download/cloog-0.18.4.tar.gz
+	if [ -x $WorkPath/crosstool-NG/ct-ng ]; then
+		cd $WorkPath/crosstool-NG
+		sudo ./ct-ng xtensa-lx106-elf
+		sudo ./ct-ng build
 	fi
-
 }
 
-function make_xtensa_lx106()
-{
-	cd $WorkPath/crosstool-NG
-	./ct-ng xtensa-lx106-elf
-	./ct-ng build
-}
-
-
-echo -e "AUTO\n${Line}"
+apt_install
 libtool_install
 set_crosstool_ng
-make_xtensa_lx106
-
-exit 0
+build_xtensa_lx106
