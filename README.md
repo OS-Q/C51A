@@ -4,7 +4,6 @@
 
 [![Build Status](https://github.com/OS-Q/C51A/workflows/CI/badge.svg)](https://github.com/OS-Q/C51A/actions/workflows/CI.yml)
 
-
 ### [简介](https://github.com/OS-Q/C51A/wiki)
 
 [C51A](https://github.com/OS-Q/C51A)

@@ -36,7 +36,7 @@ function set_crosstool_ng()
 	cd crosstool-NG
 	chmod +x ./bootstrap
 	chmod +x ./configure
-	sudo ./bootstrap && sudo ./configure --prefix=`pwd`
+	sudo ./bootstrap && ./configure --prefix=`pwd`
 	make && make install
 }
 

@@ -6,10 +6,10 @@ on:
       - master
 
 env:
-  UPLOAD_USER_FIRMWARE: false
+  UPLOAD_BUILD: true
 
 jobs:
-  DAP:
+  xtensa-lx106:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,32 +19,23 @@ jobs:
         fetch-depth: 1
 
     - name: build
-      working-directory: crosstool-NG
       id: script
       run: |
         chmod +x ./install.sh
         sudo ./install.sh
+        echo "GCC=$PWD/crosstool-NG/build" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Generate tag
       id: tag
-      if: env.UPLOAD_USER_FIRMWARE == 'true' && steps.script.outputs.status == 'success' && !cancelled()
+      if: env.UPLOAD_BUILD == 'true' && steps.script.outputs.status == 'success' && !cancelled()
       run: |
         echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
         echo "::set-output name=status::success"
 
-    - name: Release user firmware
-      uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        files: ${{ env.FIRMWARE }}/esp8266_dap.bin
-
-    - name: Upload firmware
+    - name: Upload tools
       uses: actions/upload-artifact@v2
       with:
-        name: DAP
-        path: ${{ env.FIRMWARE }}/esp8266_dap.bin
+        name: GCC
+        path: ${{ env.GCC }}
 
