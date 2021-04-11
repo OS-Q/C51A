@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  UPLOAD_USER_FIRMWARE: false
+
+jobs:
+  DAP:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: "recursive"
+        fetch-depth: 1
+
+    - name: build
+      working-directory: crosstool-NG
+      id: script
+      run: |
+        chmod +x ./install.sh
+        sudo ./install.sh
+        echo "::set-output name=status::success"
+
+    - name: Generate tag
+      id: tag
+      if: env.UPLOAD_USER_FIRMWARE == 'true' && steps.script.outputs.status == 'success' && !cancelled()
+      run: |
+        echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
+        echo "::set-output name=status::success"
+
+    - name: Release user firmware
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        files: ${{ env.FIRMWARE }}/esp8266_dap.bin
+
+    - name: Upload firmware
+      uses: actions/upload-artifact@v2
+      with:
+        name: DAP
+        path: ${{ env.FIRMWARE }}/esp8266_dap.bin
+

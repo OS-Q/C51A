@@ -1,16 +1,12 @@
-﻿# [xtensa lx106](https://github.com/sochub/xtensa-lx106)
+﻿# [C51A](https://github.com/OS-Q/C51A)
 
-[![sites](soc/soc.png)](http://www.qitas.cn) 
+[![sites](http://182.61.61.133/link/resources/OSQ.png)](http://www.OS-Q.com)
 
-#### 归属：[compiler](https://github.com/sochub/compiler)
-#### 父级：[xtensa](https://github.com/sochub/xtensa)
+[![Build Status](https://github.com/OS-Q/C51A/workflows/CI/badge.svg)](https://github.com/OS-Q/C51A/actions/workflows/CI.yml)
 
-## [描述](https://github.com/sochub/xtensa-lx106/wiki) 
 
-linux系统环境下xtensa-lx106编译器源码
+### [简介](https://github.com/OS-Q/C51A/wiki)
 
-some ref:
+[C51A](https://github.com/OS-Q/C51A)
 
-https://blog.csdn.net/flyingcys/article/details/71357261
-
-###  [SoC资源平台](http://www.qitas.cn)   
+### [源圈 OS-Q (Open Source & QA) ](http://www.OS-Q.com)
