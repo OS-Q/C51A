@@ -39,9 +39,8 @@ function set_crosstool_ng()
 function build_xtensa_lx106()
 {
 	if [ -x $WorkPath/crosstool-NG/ct-ng ]; then
-		cd $WorkPath/crosstool-NG
-		sudo ./ct-ng xtensa-lx106-elf
-		sudo ./ct-ng build
+		sudo $WorkPath/crosstool-NG/ct-ng xtensa-lx106-elf
+		sudo $WorkPath/crosstool-NG/ct-ng build
 	fi
 }
 

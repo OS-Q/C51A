@@ -23,7 +23,7 @@ jobs:
       run: |
         chmod +x ./build.sh
         sudo ./build.sh
-        echo "GCC=$PWD/crosstool-NG/build" >> $GITHUB_ENV
+        echo "GCC=$PWD/crosstool-NG" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Generate tag
